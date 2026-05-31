@@ -1,9 +1,7 @@
-/* ─── UTILITIES ─────────────────────────────────────────── */
 const $ = id => document.getElementById(id);
 const GLITCH = '!@#$%^&*<>/\\|{}[]~?';
 const gc = () => GLITCH[Math.random() * GLITCH.length | 0];
 
-/* ─── BOOT SEQUENCE DATA ─────────────────────────────────── */
 const BOOT = [
   { t: 'alfrednguyen.me — portfolio v2.1', c: 'b', ms: 0 },
   { t: '', c: 'd', ms: 0 },
@@ -23,7 +21,6 @@ const BOOT = [
   { t: '> Portfolio wird gestartet...', c: 'c', ms: 0 },
 ];
 
-/* ─── TYPEWRITER ─────────────────────────────────────────── */
 let booting = true;
 
 function typeLine(el, text, speed, cb) {
@@ -44,7 +41,6 @@ function typeLine(el, text, speed, cb) {
   })();
 }
 
-/* ─── BOOT RUNNER ────────────────────────────────────────── */
 function runBoot(idx) {
   if (!booting) { doTransition(); return; }
   if (idx >= BOOT.length) { setTimeout(doTransition, 80); return; }
@@ -60,7 +56,6 @@ function runBoot(idx) {
 
 function skipBoot() { booting = false; doTransition(); }
 
-/* ─── WIPE TRANSITION ────────────────────────────────── */
 function doTransition() {
   $('skip-hint').style.display = 'none';
   const w = $('wipe');
@@ -83,7 +78,6 @@ function doTransition() {
   }, 340);
 }
 
-/* ─── HERO TYPE-IN ───────────────────────────────────────── */
 function typeHero() {
   typeLine($('hero-name-el'), 'Minh Hieu Nguyen', 6, () => {
     $('hero-socials').classList.add('visible');
@@ -95,7 +89,6 @@ function typeHero() {
   });
 }
 
-/* ─── CITY REVEAL ────────────────────────────────────────── */
 function showCity() {
   const div = $('city-divider');
   const img = $('city-img');
@@ -113,19 +106,20 @@ function showCity() {
   }, 1400);
 }
 
-/* ─── REVEAL SECTIONS ────────────────────────────────────── */
 function revealBody() {
   $('cv-body').style.opacity = '1';
-  const ids = ['s1', 's2', 's3'];
-  ids.forEach((id, i) => setTimeout(() => $(id).classList.add('on'), i * 150 + 60));
+  const ids = ['s1', 's3'];
+  ids.forEach((id, i) => setTimeout(() => {
+    const el = $(id);
+    if (el) el.classList.add('on');
+  }, i * 150 + 60));
   setTimeout(() => {
     $('cmd-wrap').classList.add('on');
     $('cmd-in').focus();
     startAmbient();
-  }, 3 * 150 + 300);
+  }, ids.length * 150 + 300);
 }
 
-/* ─── AMBIENT GLITCH ─────────────────────────────────────── */
 function startAmbient() {
   setInterval(() => {
     if (Math.random() < 0.04) {
@@ -138,7 +132,6 @@ function startAmbient() {
   }, 2800);
 }
 
-/* ─── TERMINAL COMMANDS ──────────────────────────────────── */
 const CMDS_DE = {
   whoami: `minh hieu nguyen  //  alfred
 IT-Schueler — Coburg, Deutschland
@@ -247,14 +240,13 @@ Non-profit recycling initiative:
 
 let activeCmds = CMDS_DE;
 
-/* ─── TRANSLATIONS ───────────────────────────────────────── */
 let currentLang = 'de';
 const TRANS = {
   de: {
     'hero-name': 'Minh Hieu Nguyen',
     'hero-loc':  'coburg, deutschland',
     'hero-tag':  'IT-Schüler — Netzwerke/Systeme erkunden: Ausbildung zum Fachinformatiker Systemintegration/Anwendungsentwickler',
-    'sec-skills': 'Kenntnisse', 'sec-edu': 'Ausbildung', 'sec-proj': 'Projekte', 'sec-vol': 'Ehrenamtliche Tätigkeiten',
+    'sec-skills': 'Kenntnisse', 'sec-edu': 'Ausbildung', 'sec-vol': 'Ehrenamtliche Tätigkeiten',
     'grp-prog': 'Programmiersprachen', 'grp-os': 'Betriebssysteme & Plattformen',
     'grp-tools': 'Software & Werkzeuge', 'grp-certs': 'Zertifikate', 'grp-lang': 'Sprachen',
     'tag-vi': 'Vietnamesisch — Muttersprache', 'tag-en': 'Englisch — C1/B2', 'tag-de': 'Deutsch — B2',
@@ -266,9 +258,6 @@ const TRANS = {
     'edu2-chip1': 'abgeschlossen',
     'edu3-name': 'Realschulabschluss — Le Quy Don Oberschule',
     'edu3-desc': 'Mittlerer Schulabschluss (Realschulabschluss).', 'edu3-chip1': 'abgeschlossen',
-    'proj1-name': 'IT Home Lab — Virtualisierung & Sicherheit',
-    'proj1-desc': 'Selbst aufgebautes Virtualisierungslabor für praktische Netzwerk- und Sicherheitsübungen. Windows- und Linux-VMs für Systemintegration, Firewalls und Grundlagen des Penetrationstestings.',
-    'chip-netzwerk': 'Netzwerk',
     'vol1-name': 'Plastikgreen — Mitbegründer',
     'vol1-desc': 'Gemeinnützige Recycling-Initiative: Plastikabfälle wurden gegen Pflanzen getauscht, um das Umweltbewusstsein zu fördern. 50 % der Erlöse wurden an lokale Obdachlosenhilfe gespendet.',
     'vol1-chip1': 'Mitbegründer', 'vol1-chip2': 'gemeinnützig',
@@ -278,7 +267,7 @@ const TRANS = {
     'hero-name': 'Minh Hieu Nguyen',
     'hero-loc':  'coburg, germany',
     'hero-tag':  'IT Student — Exploring networks/systems: Vocational training as IT Specialist (System Integration/Application Development)',
-    'sec-skills': 'Skills', 'sec-edu': 'Education', 'sec-proj': 'Projects', 'sec-vol': 'Volunteer Work',
+    'sec-skills': 'Skills', 'sec-edu': 'Education', 'sec-vol': 'Volunteer Work',
     'grp-prog': 'Programming Languages', 'grp-os': 'Operating Systems & Platforms',
     'grp-tools': 'Software & Tools', 'grp-certs': 'Certificates', 'grp-lang': 'Languages',
     'tag-vi': 'Vietnamese — Native', 'tag-en': 'English — C1/B2', 'tag-de': 'German — B2',
@@ -290,9 +279,6 @@ const TRANS = {
     'edu2-chip1': 'completed',
     'edu3-name': 'Secondary School Certificate — Le Quy Don High School',
     'edu3-desc': 'Secondary school graduation (Realschulabschluss equivalent).', 'edu3-chip1': 'completed',
-    'proj1-name': 'IT Home Lab — Virtualization & Security',
-    'proj1-desc': 'Self-built virtualization lab for hands-on network and security exercises. Windows and Linux VMs for system integration, firewalls, and penetration testing fundamentals.',
-    'chip-netzwerk': 'Network',
     'vol1-name': 'Plastikgreen — Co-Founder',
     'vol1-desc': 'Non-profit recycling initiative: plastic waste exchanged for plants to raise environmental awareness. 50% of proceeds donated to local homeless aid.',
     'vol1-chip1': 'Co-Founder', 'vol1-chip2': 'non-profit',
@@ -305,23 +291,19 @@ function toggleLang() {
   const t = TRANS[currentLang];
   activeCmds = currentLang === 'de' ? CMDS_DE : CMDS_EN;
 
-  // Update button flag + code
   const isEN = currentLang === 'en';
   document.querySelector('#lang-btn .lang-flag').textContent = isEN ? '🇬🇧' : '🇩🇪';
   $('lang-code').textContent = isEN ? 'EN' : 'DE';
 
-  // Update hero typed text directly
   $('hero-name-el').textContent = t['hero-name'];
   $('hero-loc').textContent     = t['hero-loc'];
   $('hero-tag-el').textContent  = t['hero-tag'];
 
-  // Swap all data-i18n elements
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (t[key] !== undefined) el.textContent = t[key];
   });
 
-  // Clear terminal output on language change
   $('cmd-history').innerHTML = '';
   $('cmd-out').textContent = '';
   $('cmd-out').className = '';
@@ -387,5 +369,67 @@ function typeOutput(el, text) {
   })();
 }
 
-/* ─── KICK OFF ───────────────────────────────────────────── */
+const PARALLAX_SPEEDS = {
+  bg:     0.08,
+  middle: 0.25,
+  fg:     0.55
+};
+
+const layerBg     = document.querySelector('.parallax-bg');
+const layerMiddle = document.querySelector('.parallax-middle');
+const layerFg     = document.querySelector('.parallax-fg');
+const divider     = document.getElementById('city-divider');
+
+let ticking = false;
+
+function updateParallax() {
+  if (!divider || !layerBg || !layerMiddle || !layerFg) return;
+  const rect = divider.getBoundingClientRect();
+  if (rect.bottom > 0 && rect.top < window.innerHeight) {
+    const offset = -rect.top;
+    layerBg.style.transform = `translateY(${offset * PARALLAX_SPEEDS.bg}px) translateZ(0)`;
+    layerMiddle.dataset.scrollY = offset * PARALLAX_SPEEDS.middle;
+    applyCombinedTransform();
+    layerFg.style.transform = `translateY(${offset * PARALLAX_SPEEDS.fg}px) translateZ(0)`;
+  }
+  ticking = false;
+}
+
+function applyCombinedTransform(tiltX = 0, tiltY = 0) {
+  const scrollY = parseFloat(layerMiddle.dataset.scrollY || 0);
+  layerMiddle.style.transform = `perspective(1000px) translateY(${scrollY}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0)`;
+}
+
+window.addEventListener('scroll', () => {
+  if (!ticking) {
+    requestAnimationFrame(updateParallax);
+    ticking = true;
+  }
+}, { passive: true });
+
+const MAX_TILT = 12;
+
+if (divider && layerMiddle) {
+  divider.addEventListener('mousemove', (e) => {
+    if (window.innerWidth <= 768) return;
+
+    const rect = divider.getBoundingClientRect();
+    const cx   = rect.left + rect.width / 2;
+    const cy   = rect.top + rect.height / 2;
+    const dx   = (e.clientX - cx) / (rect.width / 2);
+    const dy   = (e.clientY - cy) / (rect.height / 2);
+
+    const tiltX = -dy * MAX_TILT;
+    const tiltY = dx * MAX_TILT;
+
+    layerMiddle.classList.add('is-scrolling');
+    applyCombinedTransform(tiltX, tiltY);
+  });
+
+  divider.addEventListener('mouseleave', () => {
+    layerMiddle.classList.remove('is-scrolling');
+    applyCombinedTransform(0, 0);
+  });
+}
+
 runBoot(0);
