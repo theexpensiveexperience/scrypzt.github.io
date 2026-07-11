@@ -84,27 +84,11 @@ function typeHero() {
     typeLine($('hero-loc'), 'coburg, deutschland', 5, () => {
       typeLine($('hero-tag-el'),
         'IT-Schüler — Netzwerke/Systeme erkunden: Ausbildung zum Fachinformatiker Systemintegration/Anwendungsentwickler',
-        4, () => { showCity(); });
+        4, () => { revealBody(); });
     });
   });
 }
 
-function showCity() {
-  const div = $('city-divider');
-  const img = $('city-img');
-  img.src = 'https://www.coburg.de/medien/bildergalerie/sehenswuerdigkeiten/schloesser-veste/veste/veste/DSC_5472-LR02-2.jpg.scaled/f16d720ab5c58061d86cc7baf84b1cd7.jpg';
-  div.style.display = 'block';
-  div.style.opacity = '0';
-  div.style.transition = 'opacity 0.9s ease';
-  img.onload = () => requestAnimationFrame(() => {
-    div.style.opacity = '1';
-    setTimeout(revealBody, 700);
-  });
-  img.onerror = () => setTimeout(revealBody, 200);
-  setTimeout(() => {
-    if (div.style.opacity === '0') { div.style.opacity = '1'; setTimeout(revealBody, 500); }
-  }, 1400);
-}
 
 function revealBody() {
   $('cv-body').style.opacity = '1';
@@ -367,69 +351,6 @@ function typeOutput(el, text) {
   (function tick() {
     if (i <= text.length) { el.textContent = text.slice(0, i); i++; setTimeout(tick, 8); }
   })();
-}
-
-const PARALLAX_SPEEDS = {
-  bg:     0.08,
-  middle: 0.25,
-  fg:     0.55
-};
-
-const layerBg     = document.querySelector('.parallax-bg');
-const layerMiddle = document.querySelector('.parallax-middle');
-const layerFg     = document.querySelector('.parallax-fg');
-const divider     = document.getElementById('city-divider');
-
-let ticking = false;
-
-function updateParallax() {
-  if (!divider || !layerBg || !layerMiddle || !layerFg) return;
-  const rect = divider.getBoundingClientRect();
-  if (rect.bottom > 0 && rect.top < window.innerHeight) {
-    const offset = -rect.top;
-    layerBg.style.transform = `translateY(${offset * PARALLAX_SPEEDS.bg}px) translateZ(0)`;
-    layerMiddle.dataset.scrollY = offset * PARALLAX_SPEEDS.middle;
-    applyCombinedTransform();
-    layerFg.style.transform = `translateY(${offset * PARALLAX_SPEEDS.fg}px) translateZ(0)`;
-  }
-  ticking = false;
-}
-
-function applyCombinedTransform(tiltX = 0, tiltY = 0) {
-  const scrollY = parseFloat(layerMiddle.dataset.scrollY || 0);
-  layerMiddle.style.transform = `perspective(1000px) translateY(${scrollY}px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(0)`;
-}
-
-window.addEventListener('scroll', () => {
-  if (!ticking) {
-    requestAnimationFrame(updateParallax);
-    ticking = true;
-  }
-}, { passive: true });
-
-const MAX_TILT = 12;
-
-if (divider && layerMiddle) {
-  divider.addEventListener('mousemove', (e) => {
-    if (window.innerWidth <= 768) return;
-
-    const rect = divider.getBoundingClientRect();
-    const cx   = rect.left + rect.width / 2;
-    const cy   = rect.top + rect.height / 2;
-    const dx   = (e.clientX - cx) / (rect.width / 2);
-    const dy   = (e.clientY - cy) / (rect.height / 2);
-
-    const tiltX = -dy * MAX_TILT;
-    const tiltY = dx * MAX_TILT;
-
-    layerMiddle.classList.add('is-scrolling');
-    applyCombinedTransform(tiltX, tiltY);
-  });
-
-  divider.addEventListener('mouseleave', () => {
-    layerMiddle.classList.remove('is-scrolling');
-    applyCombinedTransform(0, 0);
-  });
 }
 
 runBoot(0);
